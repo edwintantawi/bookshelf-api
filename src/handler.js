@@ -71,7 +71,93 @@ const addBookHandler = (request, h) => {
   return response;
 };
 
-const getAllBooksHandler = (_, h) => {
+const getAllBooksHandler = (request, h) => {
+  const { name, reading, finished } = request.query;
+
+  if (name) {
+    const filteredBooks = books.filter((book) => (
+      book.name.toLowerCase().includes(name.toLowerCase())
+    ));
+    if (!filteredBooks) {
+      const response = h.response({
+        status: 'fail',
+        message: 'Buku tidak ditemukan',
+      });
+      response.code(404);
+      return response;
+    }
+    const response = h.response({
+      status: 'success',
+      data: {
+        books: filteredBooks.map((book) => (
+          {
+            id: book.id,
+            name: book.name,
+            publisher: book.publisher,
+          }
+        )),
+      },
+    });
+    response.code(200);
+    return response;
+  }
+
+  if (reading) {
+    const filteredBooks = books.filter((book) => (
+      book.reading === Boolean(parseInt(reading, 10))
+    ));
+    if (!filteredBooks) {
+      const response = h.response({
+        status: 'fail',
+        message: 'Buku tidak ditemukan',
+      });
+      response.code(404);
+      return response;
+    }
+    const response = h.response({
+      status: 'success',
+      data: {
+        books: filteredBooks.map((book) => (
+          {
+            id: book.id,
+            name: book.name,
+            publisher: book.publisher,
+          }
+        )),
+      },
+    });
+    response.code(200);
+    return response;
+  }
+
+  if (finished) {
+    const filteredBooks = books.filter((book) => (
+      book.finished === Boolean(parseInt(finished, 10))
+    ));
+    if (!filteredBooks) {
+      const response = h.response({
+        status: 'fail',
+        message: 'Buku tidak ditemukan',
+      });
+      response.code(404);
+      return response;
+    }
+    const response = h.response({
+      status: 'success',
+      data: {
+        books: filteredBooks.map((book) => (
+          {
+            id: book.id,
+            name: book.name,
+            publisher: book.publisher,
+          }
+        )),
+      },
+    });
+    response.code(200);
+    return response;
+  }
+
   const response = h.response({
     status: 'success',
     data: {
